@@ -1,365 +1,199 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useState } from 'react';
 import { PROJECTS_DATA } from '../data/portfolioData';
 import ProjectModal from './ProjectModal';
-import { ExternalLink, Eye, ArrowUpRight, Play } from 'lucide-react';
+import { ExternalLink, Eye, ArrowUpRight, Play, Sparkles, CheckCircle2 } from 'lucide-react';
+import AnimatedCard from './AnimatedCard';
 
-gsap.registerPlugin(ScrollTrigger);
-
-const categories = ["All", "E-Commerce", "Export & Business Website", "Business Website", "Media & Creative"];
+const categories = [
+  "All",
+  "E-Commerce",
+  "Export & Business Website",
+  "Business Website",
+  "Media & Creative"
+];
 
 const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState(null);
 
-  const containerRef = useRef(null);
-  const folderBackRef = useRef(null);
-  const folderFrontRef = useRef(null);
-  const cardsRef = useRef([]);
-  const mobileCardsRef = useRef([]);
-  const mobileCarouselRef = useRef(null);
-
   const filteredProjects = activeCategory === "All"
     ? PROJECTS_DATA
-    : PROJECTS_DATA.filter((p) => p.category.toLowerCase().includes(activeCategory.toLowerCase()));
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      // Set initial origins (Centered in viewport)
-      if (folderBackRef.current && folderFrontRef.current) {
-        gsap.set([folderBackRef.current, folderFrontRef.current], { 
-          xPercent: -50, 
-          yPercent: -50 
-        });
-        gsap.set(folderFrontRef.current, { transformOrigin: "bottom center" });
-      }
-
-      const getGridPos = (index) => {
-        let row, col;
-        if (index < 3) { row = 0; col = index; }
-        else if (index === 3) { row = 1; col = 0; }
-        else if (index === 4) { row = 1; col = 2; }
-        else { row = 2; col = index - 5; }
-        return { row, col };
-      };
-
-      cardsRef.current.forEach((card) => {
-        if (!card) return;
-        gsap.set(card, {
-          xPercent: -50,
-          yPercent: -50,
-          rotation: gsap.utils.random(-5, 5),
-          scale: 0.85,
-          x: 0,
-          y: 0,
-        });
-      });
-
-      let mm = gsap.matchMedia();
-
-      mm.add({
-        isDesktop: "(min-width: 768px)",
-        isMobile: "(max-width: 767px)"
-      }, (context) => {
-        let { isDesktop, isMobile } = context.conditions;
-
-        if (isDesktop && containerRef.current && folderFrontRef.current) {
-          let floatTween;
-
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 45%", 
-              end: "bottom 45%",
-              toggleActions: "play reverse play reverse",
-              onEnter: () => { if (floatTween) floatTween.kill(); },
-              onEnterBack: () => { if (floatTween) floatTween.kill(); },
-              onLeave: () => { if (floatTween) floatTween.kill(); },
-              onLeaveBack: () => { if (floatTween) floatTween.kill(); }
-            },
-            onComplete: () => {
-              floatTween = gsap.to(cardsRef.current.filter(Boolean), {
-                y: "+=10",
-                rotation: "+=1",
-                duration: 3.5,
-                yoyo: true,
-                repeat: -1,
-                ease: "sine.inOut",
-                stagger: { amount: 1.2, from: "random" }
-              });
-            }
-          });
-
-          // 1. Folder flap opens
-          tl.to(folderFrontRef.current, {
-            rotationX: -130,
-            duration: 1.1,
-            ease: "power3.inOut"
-          });
-
-          // 2. Cards rise up collectively out of folder
-          tl.to(cardsRef.current.filter(Boolean), {
-            y: -130,
-            scale: 0.9,
-            zIndex: 70,
-            duration: 0.6,
-            stagger: 0.04,
-            ease: "back.out(1.2)"
-          }, "-=0.6");
-
-          // 3. Cards spread into clean blockbuster grid layout
-          tl.to(cardsRef.current.filter(Boolean), {
-            x: (i) => {
-              const w = Math.max(...cardsRef.current.map(c => c?.offsetWidth || 0)) || 360;
-              const gap = 32;
-              const { col } = getGridPos(i);
-              return (col - 1) * (w + gap);
-            },
-            y: (i) => {
-              const h = Math.max(...cardsRef.current.map(c => c?.offsetHeight || 0)) || 240;
-              const gap = 32;
-              const { row } = getGridPos(i);
-              return (row - 1) * (h + gap);
-            },
-            rotation: () => gsap.utils.random(-2, 2),
-            scale: 1,
-            duration: 1.3,
-            stagger: { amount: 0.4, from: "center" },
-            ease: "expo.out"
-          }, "-=0.2");
-        }
-
-        if (isMobile) {
-          const cardW = window.innerWidth * 0.8;
-          const gap = 20;
-          
-          mobileCardsRef.current.forEach((card, i) => {
-            if (!card) return;
-            gsap.set(card, {
-              x: -(i * (cardW + gap)), 
-              y: 0,
-              scale: 0.4,
-              opacity: 0,
-              rotation: gsap.utils.random(-12, 12)
-            });
-          });
-
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 60%",
-            }
-          });
-
-          if (folderFrontRef.current) {
-            tl.to(folderFrontRef.current, {
-              rotationX: -130,
-              duration: 0.8,
-              ease: "power3.inOut"
-            });
-          }
-
-          tl.to(mobileCardsRef.current.filter(Boolean), {
-            y: -100,
-            opacity: 1,
-            scale: 0.85,
-            duration: 0.6,
-            stagger: 0.05,
-            ease: "back.out(1.2)"
-          }, "-=0.4");
-
-          tl.to(mobileCardsRef.current.filter(Boolean), {
-            x: 0,
-            y: 0,
-            rotation: 0,
-            scale: (i) => i === 0 ? 1 : 0.92,
-            opacity: (i) => i === 0 ? 1 : 0.6,
-            duration: 0.8,
-            stagger: 0.08,
-            ease: "expo.out",
-            onComplete: () => {
-              if (mobileCarouselRef.current) {
-                mobileCarouselRef.current.style.overflowX = 'auto';
-                mobileCarouselRef.current.style.pointerEvents = 'auto';
-              }
-            }
-          }, "-=0.2");
-        }
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+    : PROJECTS_DATA.filter((p) =>
+        p.category.toLowerCase().includes(activeCategory.toLowerCase())
+      );
 
   return (
-    <section id="work" ref={containerRef} className="bg-[#050505] min-h-[100svh] md:min-h-[170vh] relative font-sans overflow-x-clip text-white w-full flex flex-col items-center justify-center py-28 select-none">
+    <section id="work" className="bg-[#050505] relative font-sans text-white w-full py-28 select-none border-t border-white/10">
       
-      {/* Background Netflix Cinematic Title Watermark */}
-      <div className="absolute top-10 left-0 w-full flex items-start justify-center pointer-events-none z-0">
-        <h1 className="text-[14vw] sm:text-[17vw] md:text-[20vw] font-black font-netflix text-white/[0.03] tracking-tighter leading-none whitespace-nowrap uppercase">
-          ORIGINALS
+      {/* Background Netflix Watermark Text */}
+      <div className="absolute top-12 left-0 w-full flex items-start justify-center pointer-events-none z-0 overflow-hidden opacity-[0.03]">
+        <h1 className="text-[18vw] font-black font-netflix text-white tracking-tighter leading-none whitespace-nowrap uppercase">
+          CLIENT WORK
         </h1>
       </div>
 
-      {/* Ambient Crimson Glow behind folder */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55vw] h-[55vw] bg-red-600/15 rounded-full blur-[170px] pointer-events-none z-0" />
+      {/* Ambient Crimson Glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-red-600/10 rounded-full blur-[180px] pointer-events-none z-0" />
 
-      {/* Header - Netflix Series Episode Format */}
-      <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-8 mb-12 flex flex-col items-center text-center">
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded bg-black/80 backdrop-blur-2xl border border-red-600/40 text-xs font-mono uppercase tracking-widest text-white shadow-2xl mb-4">
-          <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
-          <span className="text-red-500 font-bold">EPISODE 03</span>
-          <span className="text-white/40">|</span>
-          <span>FEATURED CLIENT CASE STUDIES</span>
-        </div>
-
-        <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight mb-4">
-          RECENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-amber-500">CLIENT ORIGINALS</span>
-        </h2>
-
-        <p className="text-base sm:text-lg text-white/70 font-light leading-relaxed max-w-2xl mb-8">
-          A selection of live e-commerce storefronts, custom business platforms, and digital applications engineered for high conversion.
-        </p>
-
-        {/* Filter Categories */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider transition-all duration-300 ${
-                activeCategory === cat
-                  ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(229,9,20,0.6)] font-bold'
-                  : 'bg-[#141414] border border-white/10 text-white/70 hover:text-white hover:border-white/30'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Main 3D Perspective Container */}
-      <div className="mt-8 relative w-full max-w-7xl h-full flex items-center justify-center perspective-[2000px] z-10 my-auto">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8">
         
-        {/* Origin Container */}
-        <div className="relative w-0 h-0 transform-style-3d">
-          
-          {/* Folder Back */}
-          <div 
-            ref={folderBackRef}
-            className="absolute w-[85vw] md:w-[32vw] max-w-[380px] aspect-video bg-[#141414] rounded-[24px] border border-red-600/40 shadow-[0_20px_50px_rgba(229,9,20,0.25)] flex items-center justify-center"
-            style={{ zIndex: 5 }}
-          >
-            <div className="absolute -top-6 left-6 w-32 h-8 bg-[#1f1f1f] rounded-t-xl border-t border-red-600/30" />
-            <div className="relative z-10 text-red-600 font-mono font-black text-xl tracking-widest uppercase opacity-70 flex items-center gap-2">
-              <Play className="w-5 h-5 fill-current" /> ARCHIVE_SLOTS
-            </div>
+        {/* Section Header - Netflix Series Episode Format */}
+        <div className="flex flex-col items-start space-y-4 mb-12" data-aos="fade-up">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded bg-black/80 backdrop-blur-2xl border border-red-600/40 text-xs font-mono uppercase tracking-widest text-white shadow-2xl">
+            <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
+            <span className="text-red-500 font-bold">EPISODE 03</span>
+            <span className="text-white/40">|</span>
+            <span>VERIFIED CLIENT CASE STUDIES</span>
           </div>
 
-          {/* Desktop Project Cards */}
-          {filteredProjects.map((project, i) => (
-            <div 
-              key={project.id}
-              ref={el => cardsRef.current[i] = el}
-              className="hidden md:block absolute w-[80vw] md:w-[33vw] max-w-[380px] aspect-[16/10] will-change-transform"
-              style={{ zIndex: 10 + i }}
-            >
-              <div 
-                onClick={() => setSelectedProject(project)}
-                className="w-full h-full rounded-[24px] overflow-hidden border border-white/15 bg-[#141414]/95 backdrop-blur-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9)] transition-all duration-500 group hover:scale-[1.04] hover:border-red-600 hover:shadow-[0_35px_80px_rgba(229,9,20,0.4)] hover:-translate-y-2 cursor-pointer relative z-10 p-7 flex flex-col justify-between"
-              >
-                
-                {/* Top Card Header */}
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-red-500 bg-red-600/10 px-2.5 py-1 rounded border border-red-600/20">
-                    S01 E0{i + 1}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-emerald-400 font-bold">99% Match</span>
-                    <span className="text-[10px] font-mono border border-white/30 px-1 text-white/70">4K</span>
-                  </div>
-                </div>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+            RECENT CLIENT WORK & <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-amber-500 drop-shadow-[0_0_30px_rgba(229,9,20,0.4)]">
+              FEATURED DIGITAL ORIGINALS.
+            </span>
+          </h2>
 
-                {/* Middle Title & Description */}
-                <div className="space-y-2 my-auto">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-white/40">
-                    {project.category} &bull; {project.platform}
+          <p className="text-base sm:text-lg text-white/70 font-light leading-relaxed max-w-3xl">
+            Explore live e-commerce stores, custom B2B web platforms, and business systems designed and engineered for real clients worldwide.
+          </p>
+        </div>
+
+        {/* Category Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2.5 mb-14" data-aos="fade-up" data-aos-delay="100">
+          {categories.map((cat) => {
+            const count = cat === "All"
+              ? PROJECTS_DATA.length
+              : PROJECTS_DATA.filter((p) => p.category.toLowerCase().includes(cat.toLowerCase())).length;
+
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-5 py-2.5 rounded-full text-xs font-mono tracking-wider transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+                  activeCategory === cat
+                    ? 'bg-red-600 text-white shadow-[0_0_20px_rgba(229,9,20,0.6)] font-bold scale-105'
+                    : 'bg-[#141414] border border-white/10 text-white/70 hover:text-white hover:border-white/30'
+                }`}
+              >
+                <span>{cat}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                  activeCategory === cat ? 'bg-black/30 text-white' : 'bg-white/10 text-white/50'
+                }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Client Work Interactive Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProjects.map((project, idx) => (
+            <div
+              key={project.id}
+              data-aos="fade-up"
+              data-aos-delay={(idx % 3) * 100}
+            >
+              <AnimatedCard className="h-full flex flex-col justify-between group cursor-pointer">
+                <div>
+                  
+                  {/* Top Image Preview Frame with Hover Zoom */}
+                  <div 
+                    onClick={() => setSelectedProject(project)}
+                    className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-black border border-white/10 group-hover:border-red-600/50 transition-colors"
+                  >
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-95"
+                      loading="lazy"
+                    />
+                    
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+
+                    {/* Top Badges: Episode & Match */}
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-white bg-black/80 backdrop-blur-md px-2.5 py-1 rounded border border-red-600/40">
+                        S01 E0{idx + 1}
+                      </span>
+                      <span className="text-[10px] font-mono font-bold text-emerald-400 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded border border-emerald-500/30">
+                        99% Match
+                      </span>
+                    </div>
+
+                    {/* Hover Explore Action Pill */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 bg-black/40 backdrop-blur-xs">
+                      <span className="px-4 py-2 rounded-full bg-red-600 text-white font-mono text-xs uppercase tracking-widest font-bold shadow-[0_0_20px_rgba(229,9,20,0.8)] flex items-center gap-1.5 transform scale-90 group-hover:scale-100 transition-transform">
+                        <Eye className="w-3.5 h-3.5" /> View Details
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-black text-white tracking-tight group-hover:text-red-500 transition-colors duration-300">
+
+                  {/* Category & Platform Meta */}
+                  <div className="flex items-center justify-between text-[11px] font-mono text-red-500 font-bold uppercase tracking-wider mb-2">
+                    <span>{project.category}</span>
+                    <span className="text-white/40">{project.platform}</span>
+                  </div>
+
+                  {/* Project Title */}
+                  <h3 
+                    onClick={() => setSelectedProject(project)}
+                    className="text-xl font-black font-heading text-white mb-2.5 group-hover:text-red-500 transition-colors leading-tight"
+                  >
                     {project.title}
                   </h3>
-                  <p className="text-xs text-white/70 font-light leading-relaxed line-clamp-2">
+
+                  {/* Short Description */}
+                  <p className="text-xs text-white/70 font-light leading-relaxed mb-6 line-clamp-2">
                     {project.shortDesc}
                   </p>
+
                 </div>
 
-                {/* Bottom Tech Tags */}
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
-                  {project.technologies.slice(0, 4).map((tag, tIdx) => (
-                    <span key={tIdx} className="text-[10px] font-mono text-white/70 bg-white/5 px-2 py-0.5 rounded group-hover:border-red-600/30 transition-colors">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                {/* Card Footer: Tech Tags & Live Link */}
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
+                  <div className="flex flex-wrap gap-1.5 max-w-[70%]">
+                    {project.technologies.slice(0, 3).map((tech, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="text-[10px] font-mono text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/10 group-hover:border-red-600/30 transition-colors"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
 
-                {/* Red Glowing Corner Accent */}
-                <div className="absolute bottom-4 right-4 w-2 h-2 rounded-full bg-red-600 group-hover:shadow-[0_0_15px_#E50914] transition-all" />
-              </div>
+                  <div className="flex items-center gap-2">
+                    {project.url && project.url !== "#" && (
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-8 h-8 rounded-full bg-white/5 hover:bg-red-600 text-white flex items-center justify-center transition-all duration-300 border border-white/10 hover:border-red-600 shadow-md"
+                        aria-label={`Visit live site for ${project.title}`}
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                    <button
+                      onClick={() => setSelectedProject(project)}
+                      className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-300 border border-white/10"
+                      aria-label={`Open details modal for ${project.title}`}
+                    >
+                      <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </AnimatedCard>
             </div>
           ))}
-
-          {/* Folder Front Flap */}
-          <div 
-            ref={folderFrontRef}
-            className="absolute w-[85vw] md:w-[32vw] max-w-[380px] aspect-video pointer-events-none will-change-transform"
-            style={{ zIndex: 60 }}
-          >
-            <div className="absolute bottom-0 w-full h-[85%] bg-[#1c1c1c] rounded-b-[24px] rounded-t-md shadow-[0_-5px_20px_rgba(0,0,0,0.8)] flex flex-col justify-end p-6 border-t border-red-600/40">
-              <div className="w-20 h-1.5 bg-white/20 rounded-full mx-auto mb-2" />
-            </div>
-          </div>
-
         </div>
+
       </div>
 
-      {/* Mobile Swipeable Carousel */}
-      <div 
-        ref={mobileCarouselRef}
-        className="md:hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-auto py-12 flex items-center gap-6 px-[12.5vw] pointer-events-none z-[100] snap-x snap-mandatory overflow-x-hidden no-scrollbar"
-      >
-        {filteredProjects.map((project, i) => (
-          <div 
-            key={`mob-${project.id}`}
-            ref={el => mobileCardsRef.current[i] = el}
-            onClick={() => setSelectedProject(project)}
-            className="shrink-0 w-[78vw] aspect-[16/11] snap-center will-change-transform relative z-10 cursor-pointer"
-          >
-            <div className="w-full h-full rounded-[24px] overflow-hidden border border-white/15 bg-[#141414] p-6 flex flex-col justify-between shadow-[0_20px_40px_rgba(0,0,0,0.9)]">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold tracking-widest text-red-500 bg-red-600/10 px-2 py-0.5 rounded">
-                  S01 E0{i + 1}
-                </span>
-                <span className="text-xs font-mono text-emerald-400 font-bold">99% Match</span>
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-lg font-black text-white">{project.title}</h3>
-                <p className="text-xs text-white/70 font-light line-clamp-2">{project.shortDesc}</p>
-              </div>
-              <div className="flex flex-wrap gap-1 pt-2 border-t border-white/10">
-                {project.technologies.slice(0, 3).map((tag, tIdx) => (
-                  <span key={tIdx} className="text-[10px] font-mono text-white/60 bg-white/5 px-2 py-0.5 rounded">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Modal Detailed View */}
+      {/* Project Detail Modal */}
       {selectedProject && (
         <ProjectModal
           project={selectedProject}
