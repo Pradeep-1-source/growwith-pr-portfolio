@@ -163,12 +163,13 @@ const ServicesWheel = () => {
       </div>
 
       {/* ── Episode badge top-left ── */}
-      <div className="absolute top-6 left-6 z-30 pointer-events-none" data-aos="fade-down">
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded bg-black/80 backdrop-blur-2xl border border-red-600/40 text-xs font-mono uppercase tracking-widest text-white shadow-2xl">
+      <div className="absolute top-20 sm:top-6 left-4 sm:left-6 z-30 pointer-events-none" data-aos="fade-down">
+        <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded bg-black/80 backdrop-blur-2xl border border-red-600/40 text-[10px] sm:text-xs font-mono uppercase tracking-widest text-white shadow-2xl">
           <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
           <span className="text-red-500 font-bold">EPISODE 02</span>
           <span className="text-white/40">|</span>
-          <span>SERVICES — SCROLL TO EXPLORE</span>
+          <span className="hidden sm:inline">SERVICES — </span>
+          <span>SCROLL TO EXPLORE</span>
         </div>
       </div>
 
@@ -178,7 +179,7 @@ const ServicesWheel = () => {
           <div
             key={`card-${i}`}
             ref={el => (cardsRef.current[i] = el)}
-            className="absolute w-[82vw] h-[460px] md:w-[420px] md:h-[550px] rounded-[28px] overflow-hidden bg-white border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group will-change-transform"
+            className="absolute w-[86vw] sm:w-[80vw] md:w-[420px] h-[400px] sm:h-[450px] md:h-[540px] rounded-[24px] sm:rounded-[28px] overflow-hidden bg-white border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group will-change-transform"
           >
             {/* Card image container */}
             <div className="w-full h-full relative overflow-hidden bg-zinc-900">
@@ -189,34 +190,34 @@ const ServicesWheel = () => {
               />
 
               {/* Gradient Overlay for rich readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-between p-6 sm:p-8">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent flex flex-col justify-between p-5 sm:p-7 md:p-8">
                 
                 {/* Top Badge + Number */}
                 <div className="flex items-center justify-between">
                   <span
-                    className="text-[11px] font-mono font-black uppercase tracking-widest px-3 py-1 rounded-full text-white shadow-md border border-white/20 backdrop-blur-md"
+                    className="text-[10px] sm:text-[11px] font-mono font-black uppercase tracking-widest px-2.5 sm:px-3 py-1 rounded-full text-white shadow-md border border-white/20 backdrop-blur-md"
                     style={{ backgroundColor: s.bgColor }}
                   >
                     {s.tag}
                   </span>
-                  <span className="text-3xl font-black font-netflix text-white/50">0{i + 1}</span>
+                  <span className="text-2xl sm:text-3xl font-black font-netflix text-white/50">0{i + 1}</span>
                 </div>
 
                 {/* Bottom Content Area */}
                 <div>
-                  <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight mb-2 group-hover:text-amber-400 transition-colors drop-shadow-md">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-tight tracking-tight mb-2 group-hover:text-amber-400 transition-colors drop-shadow-md">
                     {s.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-white/85 leading-relaxed font-light mb-5 max-w-sm drop-shadow">
+                  <p className="text-xs sm:text-sm text-white/85 leading-relaxed font-light mb-4 sm:mb-5 max-w-sm drop-shadow line-clamp-3 sm:line-clamp-none">
                     {s.desc}
                   </p>
 
                   <a
                     href="#contact"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black text-xs font-mono uppercase font-bold tracking-widest hover:bg-red-600 hover:text-white transition-all duration-300 shadow-xl"
+                    className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-white text-black text-[11px] sm:text-xs font-mono uppercase font-bold tracking-widest hover:bg-red-600 hover:text-white transition-all duration-300 shadow-xl active:scale-95"
                   >
                     Start Project
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <svg className="w-3.5 sm:w-4 h-3.5 sm:h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </a>
@@ -227,7 +228,7 @@ const ServicesWheel = () => {
             </div>
 
             {/* Glowing border ring */}
-            <div className="absolute inset-0 rounded-[28px] border-2 border-transparent group-hover:border-white/50 transition-colors duration-500 pointer-events-none" />
+            <div className="absolute inset-0 rounded-[24px] sm:rounded-[28px] border-2 border-transparent group-hover:border-white/50 transition-colors duration-500 pointer-events-none" />
           </div>
         ))}
       </div>

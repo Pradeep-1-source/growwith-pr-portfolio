@@ -73,18 +73,18 @@ const Skills = () => {
                   {[...techCardsRow1, ...techCardsRow1, ...techCardsRow1].map((card, idx) => (
                     <div
                       key={`tech-${idx}`}
-                      className="skill-marquee-card w-[220px] sm:w-[260px] p-5 shrink-0 cursor-pointer flex flex-col justify-between"
+                      className="skill-marquee-card w-[190px] sm:w-[230px] md:w-[260px] p-4 sm:p-5 shrink-0 cursor-pointer flex flex-col justify-between"
                     >
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-red-400 bg-red-600/10 px-2.5 py-0.5 rounded border border-red-600/20">
+                        <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-wider text-red-400 bg-red-600/10 px-2 sm:px-2.5 py-0.5 rounded border border-red-600/20">
                           {card.category}
                         </span>
-                        <span className="text-[10px] font-mono text-emerald-400 font-bold border border-emerald-500/30 px-1.5 py-0.5 rounded bg-emerald-500/10">
+                        <span className="text-[9px] sm:text-[10px] font-mono text-emerald-400 font-bold border border-emerald-500/30 px-1.5 py-0.5 rounded bg-emerald-500/10">
                           {card.level}
                         </span>
                       </div>
-                      <h4 className="text-lg font-black font-heading text-white mb-1">{card.name}</h4>
-                      <p className="text-[11px] font-mono text-white/50">Production Ready</p>
+                      <h4 className="text-base sm:text-lg font-black font-heading text-white mb-1">{card.name}</h4>
+                      <p className="text-[10px] sm:text-[11px] font-mono text-white/50">Production Ready</p>
                     </div>
                   ))}
                 </div>
@@ -96,7 +96,7 @@ const Skills = () => {
 
         {/* ── ROW 2: Reverse Infinite Scroll ── */}
         <div>
-          <div className="flex items-center justify-between px-6 sm:px-12 max-w-7xl mx-auto mb-3">
+          <div className="flex items-center justify-between px-4 sm:px-12 max-w-7xl mx-auto mb-3">
             <span className="text-xs font-mono font-bold tracking-widest uppercase text-amber-500 flex items-center gap-2">
               🏆 Deliverables & Architecture
             </span>
@@ -106,17 +106,17 @@ const Skills = () => {
             <div className="marquee-fade-left"></div>
             <div className="marquee-row-clip">
               <div className="py-2">
-                <div className="marquee-inner marquee-reverse flex transform-gpu min-w-[200%] gap-5 px-4">
+                <div className="marquee-inner marquee-reverse flex transform-gpu min-w-[200%] gap-4 sm:gap-5 px-4">
                   {[...deliverablesRow2, ...deliverablesRow2, ...deliverablesRow2].map((item, idx) => (
                     <div
                       key={`deliv-${idx}`}
-                      className="skill-marquee-card w-[240px] sm:w-[280px] p-5 shrink-0 cursor-pointer flex flex-col justify-between border-amber-500/30 hover:border-amber-500"
+                      className="skill-marquee-card w-[210px] sm:w-[250px] md:w-[280px] p-4 sm:p-5 shrink-0 cursor-pointer flex flex-col justify-between border-amber-500/30 hover:border-amber-500"
                     >
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 mb-2 block">
+                      <span className="text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 mb-1.5 sm:mb-2 block">
                         // FEATURE 0{ (idx % deliverablesRow2.length) + 1 }
                       </span>
-                      <h4 className="text-base font-black font-heading text-white mb-1">{item.title}</h4>
-                      <p className="text-xs font-mono text-white/60">{item.desc}</p>
+                      <h4 className="text-sm sm:text-base font-black font-heading text-white mb-1">{item.title}</h4>
+                      <p className="text-[11px] sm:text-xs font-mono text-white/60">{item.desc}</p>
                     </div>
                   ))}
                 </div>

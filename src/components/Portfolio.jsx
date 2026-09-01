@@ -59,7 +59,7 @@ const Portfolio = () => {
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2.5 mb-14" data-aos="fade-up" data-aos-delay="100">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 sm:pb-0 sm:flex-wrap mb-10 sm:mb-14 -mx-4 px-4 sm:mx-0 sm:px-0" data-aos="fade-up" data-aos-delay="100">
           {categories.map((cat) => {
             const count = cat === "All"
               ? PROJECTS_DATA.length
@@ -69,14 +69,14 @@ const Portfolio = () => {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-5 py-2.5 rounded-full text-xs font-mono tracking-wider transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-mono tracking-wider transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer ${
                   activeCategory === cat
                     ? 'bg-red-600 text-white shadow-[0_0_20px_rgba(229,9,20,0.6)] font-bold scale-105'
                     : 'bg-[#141414] border border-white/10 text-white/70 hover:text-white hover:border-white/30'
                 }`}
               >
                 <span>{cat}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
                   activeCategory === cat ? 'bg-black/30 text-white' : 'bg-white/10 text-white/50'
                 }`}>
                   {count}
