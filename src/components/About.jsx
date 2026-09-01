@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Code2, Layout, TrendingUp, Briefcase, MapPin, Award } from 'lucide-react';
 import AnimatedCard from './AnimatedCard';
+import profileImg from '../assets/profile.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -140,12 +141,9 @@ const About = () => {
                 {/* Profile Photo */}
                 <div className="relative w-36 h-36 rounded-full p-1 bg-gradient-to-tr from-red-600 via-rose-500 to-amber-400 shadow-2xl">
                   <img
-                    src="/src/assets/profile.jpg"
+                    src={profileImg}
                     alt="Pradeep - Founder of GrowWith PR"
                     className="w-full h-full rounded-full object-cover object-top border-4 border-[#050505]"
-                    onError={(e) => {
-                      e.target.src = "/logo.png";
-                    }}
                   />
                   <span className="absolute bottom-1 right-1 w-5 h-5 bg-emerald-400 border-2 border-[#050505] rounded-full shadow-lg shadow-emerald-400/50" />
                 </div>

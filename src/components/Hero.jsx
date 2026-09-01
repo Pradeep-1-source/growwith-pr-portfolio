@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Play, MessageCircle } from 'lucide-react';
+import profileImg from '../assets/profile.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -291,12 +292,9 @@ const Hero = () => {
 
                 <div className="relative w-full aspect-[4/4] rounded-xl overflow-hidden mb-4 bg-black">
                   <img
-                    src="/src/assets/profile.jpg"
+                    src={profileImg}
                     alt="Pradeep - Founder of GrowWith PR"
                     className="w-full h-full object-cover object-top filter brightness-105 contrast-110 group-hover:scale-[1.03] transition-transform duration-500"
-                    onError={(e) => {
-                      e.target.src = "/logo.png";
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   
