@@ -1,0 +1,148 @@
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ExternalLink, CheckCircle2, Globe, Layers, Play } from 'lucide-react';
+
+const ProjectModal = ({ project, onClose }) => {
+  if (!project) return null;
+
+  return (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto select-none">
+        {/* Backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="fixed inset-0 bg-black/85 backdrop-blur-xl z-40"
+        />
+
+        {/* Modal Container */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.3 }}
+          className="relative z-50 w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-card bg-[#141414] border-red-600/40 rounded-3xl p-6 sm:p-10 shadow-[0_40px_100px_rgba(0,0,0,0.95)] my-auto text-white"
+        >
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-6 right-6 p-2.5 rounded-full bg-black/60 border border-white/20 text-white hover:text-red-500 hover:bg-black transition-all z-20"
+            aria-label="Close modal"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          {/* Header Tag & Title */}
+          <div className="mb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="px-3 py-1 rounded bg-red-600 text-white text-xs font-mono font-bold uppercase tracking-widest shadow-md">
+                FEATURED ORIGINAL
+              </span>
+              <span className="text-xs font-mono text-emerald-400 font-bold">99% Match</span>
+              <span className="text-[10px] font-mono border border-white/30 px-1.5 py-0.5 text-white/70">4K HD</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black font-heading text-white mb-2">
+              {project.title}
+            </h2>
+            <p className="text-xs sm:text-sm text-white/60 font-mono">
+              Client: <strong className="text-white font-bold">{project.client}</strong> &bull; Category: <span className="text-red-400">{project.category}</span>
+            </p>
+          </div>
+
+          {/* Large Hero Image */}
+          <div className="relative w-full h-64 sm:h-96 rounded-2xl overflow-hidden border border-white/10 mb-8 bg-black group">
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover filter contrast-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
+
+            <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center justify-between gap-4">
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noreferrer"
+                className="netflix-red-btn px-6 py-3 rounded-lg text-xs font-mono uppercase tracking-widest flex items-center gap-2 shadow-[0_0_25px_rgba(229,9,20,0.8)]"
+              >
+                <Play className="w-4 h-4 fill-current" /> Visit Live Website
+              </a>
+              <span className="text-xs font-mono text-white/70 bg-black/60 px-3 py-1.5 rounded border border-white/10">
+                {project.platform}
+              </span>
+            </div>
+          </div>
+
+          {/* Grid Details */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            {/* Objective */}
+            <div className="p-6 rounded-2xl bg-black/60 border border-white/10">
+              <h4 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold mb-3 flex items-center gap-2">
+                <Globe className="w-4 h-4 text-red-500" /> Project Objective
+              </h4>
+              <p className="text-xs sm:text-sm text-white/80 font-light leading-relaxed">
+                {project.objective}
+              </p>
+            </div>
+
+            {/* Tech Stack */}
+            <div className="p-6 rounded-2xl bg-black/60 border border-white/10">
+              <h4 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold mb-3 flex items-center gap-2">
+                <Layers className="w-4 h-4 text-red-500" /> Core Tech Stack
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1 rounded text-xs font-mono bg-white/5 border border-white/10 text-white/80"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Key Work Performed */}
+          <div className="mb-8 p-6 sm:p-8 rounded-2xl bg-black/80 border border-white/10">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold mb-4">
+              Key Engineering & Execution Work
+            </h4>
+            <ul className="grid sm:grid-cols-2 gap-3">
+              {project.workPerformed.map((item, idx) => (
+                <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-white/80 font-light">
+                  <CheckCircle2 className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Action Buttons Footer */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noreferrer"
+              className="netflix-red-btn w-full sm:w-auto px-8 py-3.5 rounded text-xs font-mono uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(229,9,20,0.6)]"
+            >
+              Open Live Site in New Tab <ExternalLink className="w-4 h-4" />
+            </a>
+
+            <button
+              onClick={onClose}
+              className="w-full sm:w-auto px-6 py-3.5 rounded text-xs font-mono uppercase tracking-widest text-white/70 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+            >
+              Close Overview
+            </button>
+          </div>
+
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  );
+};
+
+export default ProjectModal;
