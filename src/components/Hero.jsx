@@ -2,14 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Play, MessageCircle } from 'lucide-react';
-import profileImg from '../assets/profile.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const sectionRef = useRef(null);
-  const cardRef = useRef(null);
-  const glareRef = useRef(null);
   const spotlightRef = useRef(null);
   const contentRef = useRef(null);
   const textRef = useRef(null);
@@ -31,9 +28,8 @@ const Hero = () => {
 
   useEffect(() => {
     const section = sectionRef.current;
-    const card = cardRef.current;
     const content = contentRef.current;
-    if (!section || !card || !content) return;
+    if (!section || !content) return;
 
     // --- GSAP CINEMATIC ENTRANCE ANIMATION ---
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
@@ -42,43 +38,22 @@ const Hero = () => {
       content.querySelectorAll('.hero-anim-item'),
       { y: 40, opacity: 0, filter: "blur(8px)" },
       { y: 0, opacity: 1, filter: "blur(0px)", duration: 1, stagger: 0.08 }
-    )
-    .fromTo(
-      card,
-      { scale: 0.8, opacity: 0, rotationY: 25, rotationX: -10 },
-      { scale: 1, opacity: 1, rotationY: 0, rotationX: 0, duration: 1.2, ease: "back.out(1.2)" },
-      "-=0.8"
     );
 
     // --- PORTNEWSTICH PARALLAX SCRUB ON SCROLL ---
-    gsap.to(card, {
-      y: 70,
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.2,
-      }
-    });
-
-    gsap.to(textRef.current, {
-      y: -40,
-      opacity: 0.8,
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.2,
-      }
-    });
-
-    // --- MOUSE PHYSICS & 3D HOLOGRAPHIC TILT ---
-    const xTilt = gsap.quickTo(card, "rotationY", { duration: 0.4, ease: "power3.out" });
-    const yTilt = gsap.quickTo(card, "rotationX", { duration: 0.4, ease: "power3.out" });
-    const glareX = gsap.quickTo(glareRef.current, "x", { duration: 0.3, ease: "power2.out" });
-    const glareY = gsap.quickTo(glareRef.current, "y", { duration: 0.3, ease: "power2.out" });
+    if (textRef.current) {
+      gsap.to(textRef.current, {
+        y: -40,
+        opacity: 0.8,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.2,
+        }
+      });
+    }
 
     const handleMouseMove = (e) => {
       const rect = section.getBoundingClientRect();
@@ -88,21 +63,6 @@ const Hero = () => {
       if (spotlightRef.current) {
         spotlightRef.current.style.transform = `translate3d(${x - 300}px, ${y - 300}px, 0)`;
       }
-
-      const cardRect = card.getBoundingClientRect();
-      const cardCenterX = cardRect.left + cardRect.width / 2 - rect.left;
-      const cardCenterY = cardRect.top + cardRect.height / 2 - rect.top;
-
-      const rotateX = -((y - cardCenterY) / (cardRect.height / 2)) * 14;
-      const rotateY = ((x - cardCenterX) / (cardRect.width / 2)) * 14;
-
-      xTilt(rotateY);
-      yTilt(rotateX);
-
-      if (glareRef.current) {
-        glareX((x - cardRect.left) - cardRect.width / 2);
-        glareY((y - cardRect.top) - cardRect.height / 2);
-      }
     };
 
     const handleMouseEnter = () => {
@@ -111,8 +71,6 @@ const Hero = () => {
 
     const handleMouseLeave = () => {
       if (spotlightRef.current) gsap.to(spotlightRef.current, { opacity: 0, duration: 0.3 });
-      xTilt(0);
-      yTilt(0);
     };
 
     section.addEventListener("mousemove", handleMouseMove);
@@ -172,10 +130,10 @@ const Hero = () => {
         </div>
 
         {/* Main Center Stage Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-10">
+        <div className="max-w-4xl py-6">
           
-          {/* Left Side: Developer Story & Portnewstich Rolling Headline (7 Cols) */}
-          <div ref={textRef} className="lg:col-span-7 flex flex-col items-start space-y-5 text-left will-change-transform">
+          {/* Developer Story & Rolling Headline */}
+          <div ref={textRef} className="flex flex-col items-start space-y-5 text-left will-change-transform">
             
             <div className="hero-anim-item flex items-center gap-3" data-aos="fade-right">
               <span className="px-3 py-1 bg-red-600 text-white font-black text-xs rounded tracking-widest shadow-[0_0_20px_rgba(229,9,20,0.8)] animate-pulse">TOP 1%</span>
@@ -184,17 +142,17 @@ const Hero = () => {
 
             {/* Portnewstich 3D Rolling Headline */}
             <div className="hero-anim-item flex flex-col w-full" data-aos="fade-up">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-none">
+              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight text-white leading-none">
                 HELLO, I'M <span className="gold-gradient-text">PRADEEP</span>
               </h1>
               
               {/* Portnewstich Interactive Rolling Text Container */}
-              <div className="leading-[0.9] pb-1 overflow-hidden h-[11vw] sm:h-[4.2rem] lg:h-[4.8rem] relative mt-1">
+              <div className="leading-[0.9] pb-1 overflow-hidden h-[11vw] sm:h-[4.2rem] lg:h-[5.5rem] relative mt-1">
                 <div className="animate-text-roll flex flex-col">
                   {rollingTexts.map((text, idx) => (
                     <h1
                       key={idx}
-                      className="text-[9vw] sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-transparent [-webkit-text-stroke:2px_#E50914] m-0 p-0 leading-[0.9] drop-shadow-[0_0_20px_rgba(229,9,20,0.5)]"
+                      className="text-[9vw] sm:text-5xl lg:text-7xl font-black uppercase tracking-tighter text-transparent [-webkit-text-stroke:2px_#E50914] m-0 p-0 leading-[0.9] drop-shadow-[0_0_20px_rgba(229,9,20,0.5)]"
                     >
                       {text}
                     </h1>
@@ -213,7 +171,7 @@ const Hero = () => {
               <span className="text-white/90">Meta Ads</span>
             </div>
 
-            <p className="hero-anim-item text-base sm:text-lg text-white/80 font-light leading-relaxed max-w-xl" data-aos="fade-up" data-aos-delay="150">
+            <p className="hero-anim-item text-base sm:text-xl text-white/80 font-light leading-relaxed max-w-2xl" data-aos="fade-up" data-aos-delay="150">
               Founder of <strong className="text-white font-semibold">GrowWith PR</strong>. I engineer high-performance custom websites, Shopify & WordPress online stores, and conversion-focused marketing campaigns.
             </p>
 
@@ -269,59 +227,6 @@ const Hero = () => {
               </a>
             </div>
 
-          </div>
-
-          {/* Right Side: Interactive 3D Holographic Tilt Poster Frame (5 Cols) */}
-          <div className="lg:col-span-5 flex justify-center perspective-[1200px]" data-aos="fade-left" data-aos-delay="200">
-            <div 
-              ref={cardRef}
-              className="relative group transform-gpu transition-transform duration-100 ease-out will-change-transform w-full max-w-sm"
-            >
-              <div className="absolute -inset-3 bg-gradient-to-r from-red-600/70 via-rose-600/40 to-amber-500/20 rounded-3xl blur-3xl opacity-90 group-hover:opacity-100 animate-pulse duration-1000"></div>
-              
-              <div className="relative p-4 bg-[#141414]/90 backdrop-blur-2xl rounded-2xl border border-red-600/40 shadow-[0_40px_80px_rgba(0,0,0,0.95)] overflow-hidden">
-                
-                <div 
-                  ref={glareRef}
-                  className="absolute inset-[-50%] w-[200%] h-[200%] bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none transform-gpu z-40"
-                ></div>
-
-                <div className="absolute top-6 left-6 z-30 px-3 py-1 bg-red-600 text-white font-mono text-[10px] font-bold tracking-widest rounded shadow-xl">
-                  FEATURED CREATOR
-                </div>
-
-                <div className="relative w-full aspect-[4/4] rounded-xl overflow-hidden mb-4 bg-black">
-                  <img
-                    src={profileImg}
-                    alt="Pradeep - Founder of GrowWith PR"
-                    className="w-full h-full object-cover object-top filter brightness-105 contrast-110 group-hover:scale-[1.03] transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
-                    <div>
-                      <h3 className="font-bold text-lg font-heading">Pradeep</h3>
-                      <p className="text-xs text-red-500 font-mono font-bold uppercase">Founder & Lead Architect</p>
-                    </div>
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-black/80 border border-white/20 text-[10px] text-emerald-400 font-mono">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Active Now
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 pt-1">
-                  <div className="p-3 rounded-xl bg-black/60 border border-white/10 flex flex-col">
-                    <span className="text-xl font-black text-white font-heading">500+</span>
-                    <span className="text-[10px] font-mono text-white/50 uppercase tracking-wider">Completed Projects</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-black/60 border border-white/10 flex flex-col">
-                    <span className="text-xl font-black text-red-500 font-heading">300+</span>
-                    <span className="text-[10px] font-mono text-white/50 uppercase tracking-wider">Happy Clients</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
           </div>
 
         </div>
