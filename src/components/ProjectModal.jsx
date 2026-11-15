@@ -64,7 +64,7 @@ const ProjectModal = ({ project, onClose }) => {
               <a
                 href={project.url}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="netflix-red-btn px-6 py-3 rounded-lg text-xs font-mono uppercase tracking-widest flex items-center gap-2 shadow-[0_0_25px_rgba(229,9,20,0.8)]"
               >
                 <Play className="w-4 h-4 fill-current" /> Visit Live Website

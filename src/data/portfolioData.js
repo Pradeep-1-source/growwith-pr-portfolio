@@ -1,3 +1,10 @@
+import aurexGlobalsImg from '../assets/images/aurex-globals.jpg';
+import urbanFreshImg from '../assets/images/urban-fresh.jpg';
+import yoursSpeciallyImg from '../assets/images/yours-specially.jpg';
+import pkGymImg from '../assets/images/pk-gym.jpg';
+import aglowxImg from '../assets/images/aglowx.jpg';
+import giftKadaiImg from '../assets/images/gift-kadai.jpg';
+
 export const STATS_DATA = [
   { value: "500+", label: "Projects Completed", desc: "Delivered across web, ecommerce & marketing" },
   { value: "300+", label: "Happy Clients", desc: "Global & Indian business owners served" },
@@ -82,6 +89,120 @@ export const SERVICES_DATA = [
 
 export const PROJECTS_DATA = [
   {
+    id: "aurex-globals",
+    title: "Aurex Globals",
+    category: "Corporate Website",
+    platform: "Corporate B2B / Next.js",
+    url: "https://www.aurexglobals.com/",
+    shortDesc: "Corporate export platform for premium Indonesian Areca Nuts and agricultural commodities connecting global B2B buyers.",
+    image: aurexGlobalsImg,
+    client: "Aurex Global Indonesia",
+    objective: "Establish a high-credibility international corporate presence to streamline wholesale inquiries from buyers across Asia and the Middle East.",
+    workPerformed: [
+      "Corporate brand identity & responsive web application design",
+      "Comprehensive grade specification catalog for wholesale Areca Nuts",
+      "Instant quotation inquiry routing & direct WhatsApp B2B integration",
+      "International SEO optimization and high-speed global CDN delivery"
+    ],
+    technologies: ["React", "Tailwind CSS", "JavaScript", "SEO", "Vercel"],
+    featured: true
+  },
+  {
+    id: "urban-fresh",
+    title: "Urban Fresh",
+    category: "Business / Rice Industry Website",
+    platform: "Agri-Export Web Platform",
+    url: "https://www.urban-fresh.in/",
+    shortDesc: "Premium Indian agricultural & rice industry export portal facilitating global distribution, sourcing, and trade inquiries.",
+    image: urbanFreshImg,
+    client: "Urban Fresh India",
+    objective: "Showcase agricultural purity, state-of-the-art processing, and export-grade rice varieties to international commercial buyers.",
+    workPerformed: [
+      "Clean, corporate agricultural showcase with high-definition product visualizers",
+      "Rice variety specifications, nutritional analysis, and certification badges",
+      "Fast inquiry generation system for bulk global import contracts",
+      "Mobile-first responsive architecture with smooth scroll animations"
+    ],
+    technologies: ["React", "Tailwind CSS", "Vite", "Node.js", "SEO"],
+    featured: true
+  },
+  {
+    id: "yours-specially-jewellery",
+    title: "Yours Specially Jewellery",
+    category: "Jewellery E-commerce Website",
+    platform: "Luxury E-Commerce",
+    url: "https://yoursspeciallyjewellery.in/",
+    shortDesc: "Exquisite luxury jewellery storefront featuring handcrafted rose gold, diamond collections, and bridal trousseau elegance.",
+    image: yoursSpeciallyImg,
+    client: "Yours Specially Fine Jewellery",
+    objective: "Create an opulent, high-converting digital boutique reflecting artisanal jewellery craftsmanship with seamless checkout.",
+    workPerformed: [
+      "Bespoke luxury aesthetic featuring high-resolution zoomable product imagery",
+      "Instant category filtering across rings, necklaces, bridal sets, and bangles",
+      "Customized enquiry funnels and WhatsApp concierge shopping integration",
+      "Speed-optimized image asset delivery for swift mobile browsing"
+    ],
+    technologies: ["Next.js / React", "Tailwind CSS", "Razorpay", "Framer Motion", "Cloudinary"],
+    featured: true
+  },
+  {
+    id: "pk-gym",
+    title: "PK Gym",
+    category: "Gym & Fitness Website",
+    platform: "Fitness Club & Web App",
+    url: "https://pk-gymm.vercel.app/",
+    shortDesc: "High-energy fitness club web portal equipped with membership tiers, elite trainer rosters, and workout program schedules.",
+    image: pkGymImg,
+    client: "PK Gym & Fitness Club",
+    objective: "Drive local gym memberships, personal trainer bookings, and trial session sign-ups through an aggressive, dark-themed athletic UI.",
+    workPerformed: [
+      "Dynamic dark athletic UI engineered with motivational typography and high-contrast visuals",
+      "Interactive membership plan comparisons and pricing tiers",
+      "Trainer roster highlights, schedule visualizers, and online admission enquiry form",
+      "Mobile touch-optimized navigation and Google Maps integration"
+    ],
+    technologies: ["React", "Tailwind CSS", "Vite", "Framer Motion", "Vercel"],
+    featured: true
+  },
+  {
+    id: "aglowx",
+    title: "Aglowx",
+    category: "Creative & Branding Agency",
+    platform: "Creative Studio & Brand Portal",
+    url: "https://www.aglowx.my/",
+    shortDesc: "Boutique luxury creative agency pushing boundaries in digital design, motion storytelling, and transformative brand experiences.",
+    image: aglowxImg,
+    client: "AglowX Creative Agency",
+    objective: "Design an avant-garde digital agency portfolio showcasing brand identity, UI/UX design, motion graphics, and high-end video production.",
+    workPerformed: [
+      "Editorial typography, luxury dark aesthetic with electric cyan accents",
+      "Smooth micro-interactions, motion storytelling, and interactive case study displays",
+      "Comprehensive service breakdowns covering Brand Identity, UI/UX, and Video Production",
+      "Flawless cross-device performance and high-performance WebGL / CSS animations"
+    ],
+    technologies: ["React", "Tailwind CSS", "Framer Motion", "Vite", "Modern JS"],
+    featured: true
+  },
+  {
+    id: "gift-kadai",
+    title: "Gift Kadai",
+    category: "E-commerce / Online Gift Store",
+    platform: "Shopify / Custom Storefront",
+    url: "https://giftkadai.co.in/",
+    shortDesc: "Vibrant online gift store delivering personalized hampers, engraved keepsakes, custom photo gifts, and celebration novelties.",
+    image: giftKadaiImg,
+    client: "Gift Kadai Retail",
+    objective: "Build an intuitive, joyous online shopping destination where customers can customize and order unique gifts effortlessly.",
+    workPerformed: [
+      "Customized e-commerce catalog featuring customized gift preview workflows",
+      "Seamless cart operations, instant category discovery, and seasonal festive filters",
+      "Multi-payment checkout options with automated order tracking updates",
+      "Optimized conversion funnels that decreased mobile drop-offs by 40%"
+    ],
+    technologies: ["Shopify", "Liquid", "JavaScript", "Tailwind CSS", "Payment Gateways"],
+    featured: true
+  },
+  {
     id: "decor-station",
     title: "Decor Station Store",
     category: "E-Commerce",
@@ -98,64 +219,7 @@ export const PROJECTS_DATA = [
       "Mobile checkout optimization resulting in 35% higher conversions"
     ],
     technologies: ["Shopify", "Liquid", "JavaScript", "Tailwind CSS", "Razorpay"],
-    featured: true
-  },
-  {
-    id: "zynors-tech",
-    title: "Zynors Tech Ecommerce",
-    category: "E-Commerce",
-    platform: "Full-Stack Web",
-    url: "https://zynors.in",
-    shortDesc: "A premium e-commerce platform offering modern UI, custom product filtering, and ultra-fast page rendering.",
-    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=800",
-    client: "Zynors Tech Solutions",
-    objective: "Build an all-in-one digital commerce solution with scalable database and customized admin management.",
-    workPerformed: [
-      "Full-stack architecture design with modern JavaScript frontend",
-      "Custom shopping cart state & instant filter system",
-      "Automated order notifications and WhatsApp integration",
-      "Search Engine Optimization (SEO) setup"
-    ],
-    technologies: ["React", "Node.js", "Express", "Tailwind CSS", "MySQL"],
-    featured: true
-  },
-  {
-    id: "aurex-global",
-    title: "Aurex Global — Areca Nut Export",
-    category: "Export & Business Website",
-    platform: "Custom Web App",
-    url: "https://aurexglobal.com",
-    shortDesc: "International export business platform for Areca Nut, Indonesian spices, and natural coconut products.",
-    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800",
-    client: "Aurex Global Indonesia",
-    objective: "Establish a trustworthy global web presence to capture international trade inquiries from buyers in Asia & Middle East.",
-    workPerformed: [
-      "Multi-language ready B2B export website design",
-      "Detailed product specification catalog for Areca Nut & Spices",
-      "Direct WhatsApp export quotation request funnel",
-      "Global search engine indexing & international trust badges"
-    ],
-    technologies: ["HTML5", "CSS3", "JavaScript", "PHP", "SEO"],
-    featured: true
-  },
-  {
-    id: "sri-kdm-store",
-    title: "Sri KDM Store",
-    category: "E-Commerce",
-    platform: "React Storefront",
-    url: "https://srikdm.in",
-    shortDesc: "High-converting online retail store built with React featuring advanced category filters and lightning speed.",
-    image: "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?auto=format&fit=crop&q=80&w=800",
-    client: "Sri KDM Enterprises",
-    objective: "Provide a seamless mobile shopping experience for customers with zero lag during peak traffic sales.",
-    workPerformed: [
-      "Single Page Application (SPA) development with React",
-      "Dynamic search & instant category filtering",
-      "Mobile-optimized touch navigation",
-      "WhatsApp one-click order enquiry integration"
-    ],
-    technologies: ["React", "Tailwind CSS", "JavaScript", "Vite"],
-    featured: true
+    featured: false
   },
   {
     id: "bigtown-collectibles",

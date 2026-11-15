@@ -1,16 +1,34 @@
 import React, { useState } from 'react';
 import { PROJECTS_DATA } from '../data/portfolioData';
 import ProjectModal from './ProjectModal';
-import { ExternalLink, Eye, ArrowUpRight, Play, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ExternalLink, Eye, ArrowUpRight } from 'lucide-react';
 import AnimatedCard from './AnimatedCard';
 
 const categories = [
   "All",
   "E-Commerce",
-  "Export & Business Website",
-  "Business Website",
-  "Media & Creative"
+  "Corporate & Business",
+  "Creative & Agency",
+  "Gym & Fitness"
 ];
+
+const matchesCategory = (project, cat) => {
+  if (cat === "All") return true;
+  const pCat = (project.category || "").toLowerCase();
+  if (cat === "E-Commerce") {
+    return pCat.includes("commerce") || pCat.includes("store");
+  }
+  if (cat === "Corporate & Business") {
+    return pCat.includes("corporate") || pCat.includes("business") || pCat.includes("rice");
+  }
+  if (cat === "Creative & Agency") {
+    return pCat.includes("creative") || pCat.includes("agency") || pCat.includes("media");
+  }
+  if (cat === "Gym & Fitness") {
+    return pCat.includes("gym") || pCat.includes("fitness");
+  }
+  return pCat.includes(cat.toLowerCase());
+};
 
 const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -18,9 +36,7 @@ const Portfolio = () => {
 
   const filteredProjects = activeCategory === "All"
     ? PROJECTS_DATA
-    : PROJECTS_DATA.filter((p) =>
-        p.category.toLowerCase().includes(activeCategory.toLowerCase())
-      );
+    : PROJECTS_DATA.filter((p) => matchesCategory(p, activeCategory));
 
   return (
     <section id="work" className="bg-[#050505] relative font-sans text-white w-full py-28 select-none border-t border-white/10">
@@ -63,7 +79,7 @@ const Portfolio = () => {
           {categories.map((cat) => {
             const count = cat === "All"
               ? PROJECTS_DATA.length
-              : PROJECTS_DATA.filter((p) => p.category.toLowerCase().includes(cat.toLowerCase())).length;
+              : PROJECTS_DATA.filter((p) => matchesCategory(p, cat)).length;
 
             return (
               <button
@@ -88,107 +104,112 @@ const Portfolio = () => {
 
         {/* Client Work Interactive Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, idx) => (
-            <div
-              key={project.id}
-              data-aos="fade-up"
-              data-aos-delay={(idx % 3) * 100}
-            >
-              <AnimatedCard className="h-full flex flex-col justify-between group cursor-pointer">
-                <div>
-                  
-                  {/* Top Image Preview Frame with Hover Zoom */}
-                  <div 
-                    onClick={() => setSelectedProject(project)}
-                    className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-black border border-white/10 group-hover:border-red-600/50 transition-colors"
-                  >
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-95"
-                      loading="lazy"
-                    />
+          {filteredProjects.map((project, idx) => {
+            const episodeNum = idx + 1 < 10 ? `0${idx + 1}` : `${idx + 1}`;
+            return (
+              <div
+                key={project.id}
+                data-aos="fade-up"
+                data-aos-delay={(idx % 3) * 100}
+              >
+                <AnimatedCard className="h-full flex flex-col justify-between group cursor-pointer">
+                  <div>
                     
-                    {/* Dark gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
-
-                    {/* Top Badges: Episode & Match */}
-                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-white bg-black/80 backdrop-blur-md px-2.5 py-1 rounded border border-red-600/40">
-                        S01 E0{idx + 1}
-                      </span>
-                      <span className="text-[10px] font-mono font-bold text-emerald-400 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded border border-emerald-500/30">
-                        99% Match
-                      </span>
-                    </div>
-
-                    {/* Hover Explore Action Pill */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 bg-black/40 backdrop-blur-xs">
-                      <span className="px-4 py-2 rounded-full bg-red-600 text-white font-mono text-xs uppercase tracking-widest font-bold shadow-[0_0_20px_rgba(229,9,20,0.8)] flex items-center gap-1.5 transform scale-90 group-hover:scale-100 transition-transform">
-                        <Eye className="w-3.5 h-3.5" /> View Details
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Category & Platform Meta */}
-                  <div className="flex items-center justify-between text-[11px] font-mono text-red-500 font-bold uppercase tracking-wider mb-2">
-                    <span>{project.category}</span>
-                    <span className="text-white/40">{project.platform}</span>
-                  </div>
-
-                  {/* Project Title */}
-                  <h3 
-                    onClick={() => setSelectedProject(project)}
-                    className="text-xl font-black font-heading text-white mb-2.5 group-hover:text-red-500 transition-colors leading-tight"
-                  >
-                    {project.title}
-                  </h3>
-
-                  {/* Short Description */}
-                  <p className="text-xs text-white/70 font-light leading-relaxed mb-6 line-clamp-2">
-                    {project.shortDesc}
-                  </p>
-
-                </div>
-
-                {/* Card Footer: Tech Tags & Live Link */}
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
-                  <div className="flex flex-wrap gap-1.5 max-w-[70%]">
-                    {project.technologies.slice(0, 3).map((tech, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="text-[10px] font-mono text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/10 group-hover:border-red-600/30 transition-colors"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    {project.url && project.url !== "#" && (
-                      <a
-                        href={project.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="w-8 h-8 rounded-full bg-white/5 hover:bg-red-600 text-white flex items-center justify-center transition-all duration-300 border border-white/10 hover:border-red-600 shadow-md"
-                        aria-label={`Visit live site for ${project.title}`}
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                    <button
+                    {/* Top Image Preview Frame with Hover Zoom */}
+                    <div 
                       onClick={() => setSelectedProject(project)}
-                      className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-300 border border-white/10"
-                      aria-label={`Open details modal for ${project.title}`}
+                      className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-black border border-white/10 group-hover:border-red-600/50 transition-colors"
                     >
-                      <ArrowUpRight className="w-4 h-4" />
-                    </button>
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-95"
+                        loading="lazy"
+                      />
+                      
+                      {/* Dark gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+
+                      {/* Top Badges: Episode & Match */}
+                      <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-white bg-black/80 backdrop-blur-md px-2.5 py-1 rounded border border-red-600/40">
+                          S01 E{episodeNum}
+                        </span>
+                        <span className="text-[10px] font-mono font-bold text-emerald-400 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded border border-emerald-500/30">
+                          99% Match
+                        </span>
+                      </div>
+
+                      {/* Hover Explore Action Pill */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 bg-black/40 backdrop-blur-xs">
+                        <span className="px-4 py-2 rounded-full bg-red-600 text-white font-mono text-xs uppercase tracking-widest font-bold shadow-[0_0_20px_rgba(229,9,20,0.8)] flex items-center gap-1.5 transform scale-90 group-hover:scale-100 transition-transform">
+                          <Eye className="w-3.5 h-3.5" /> View Details
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Category & Platform Meta */}
+                    <div className="flex items-center justify-between text-[11px] font-mono text-red-500 font-bold uppercase tracking-wider mb-2 gap-2">
+                      <span className="truncate">{project.category}</span>
+                      <span className="text-white/40 shrink-0">{project.platform}</span>
+                    </div>
+
+                    {/* Project Title */}
+                    <h3 
+                      onClick={() => setSelectedProject(project)}
+                      className="text-xl font-black font-heading text-white mb-2.5 group-hover:text-red-500 transition-colors leading-tight"
+                    >
+                      {project.title}
+                    </h3>
+
+                    {/* Short Description */}
+                    <p className="text-xs text-white/70 font-light leading-relaxed mb-6 line-clamp-2">
+                      {project.shortDesc}
+                    </p>
+
                   </div>
-                </div>
-              </AnimatedCard>
-            </div>
-          ))}
+
+                  {/* Card Footer: Tech Tags & Live Link */}
+                  <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto gap-3">
+                    <div className="flex flex-wrap gap-1.5 max-w-[50%]">
+                      {project.technologies.slice(0, 2).map((tech, tIdx) => (
+                        <span
+                          key={tIdx}
+                          className="text-[10px] font-mono text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/10 group-hover:border-red-600/30 transition-colors truncate"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      {project.url && project.url !== "#" && (
+                        <a
+                          href={project.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-[11px] font-mono font-bold tracking-wider uppercase transition-all duration-300 shadow-[0_0_12px_rgba(229,9,20,0.5)] hover:shadow-[0_0_20px_rgba(229,9,20,0.85)] hover:scale-105"
+                          aria-label={`Visit live site for ${project.title}`}
+                        >
+                          <span>Live Website</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
+                      <button
+                        onClick={() => setSelectedProject(project)}
+                        className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/20 text-white/80 hover:text-white flex items-center justify-center transition-all duration-300 border border-white/10 hover:border-white/30"
+                        aria-label={`Open details modal for ${project.title}`}
+                        title="View Details"
+                      >
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </AnimatedCard>
+              </div>
+            );
+          })}
         </div>
 
       </div>
